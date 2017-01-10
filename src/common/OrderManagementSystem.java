@@ -1,5 +1,7 @@
 package common;
 
+import client.general.loginClient;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -18,6 +20,8 @@ public class OrderManagementSystem {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        loginClient lc=new loginClient();
+        lc.setVisible(true);
     }
     
 }

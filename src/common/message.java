@@ -32,5 +32,10 @@ public class message {
 
     
     }
+    public String dialogBox(String Message){
+        String inp=JOptionPane.showInputDialog(Message);
+        return inp;
+    
+    }
     
 }

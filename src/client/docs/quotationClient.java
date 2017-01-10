@@ -5,10 +5,21 @@
  */
 package client.docs;
 
+import common.dbconnct;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import middle.docs.deliverOrderMiddle;
+import middle.docs.orderMiddle;
+import middle.docs.printQuotation;
 
 /**
  *
@@ -19,25 +30,54 @@ public class quotationClient extends javax.swing.JFrame {
     /**
      * Creates new form quotationClient
      */
+    Connection con = null;
+    PreparedStatement pst = null;
+    Statement stmt = null;
+    ResultSet rs = null;
+    orderMiddle om = new orderMiddle();
+    printQuotation pq;
+    deliverOrderMiddle dorm;
+     File selectedFile ;
+
     public quotationClient() {
         initComponents();
-        
+        con = dbconnct.connect();
+        loadProduct();
+        new printQuotation();
+
     }
-public void x(){
 
-JFileChooser fileChooser = new JFileChooser();
-fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-int result = fileChooser.showOpenDialog(this);
-if (result == JFileChooser.APPROVE_OPTION) {
-    File selectedFile = fileChooser.getSelectedFile();
-    
-}
+    public void x() {
 
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+             selectedFile = fileChooser.getSelectedFile();
 
+        }
 
+    }
 
+    private void loadProduct() {
 
-}
+        try {
+            String load = "SELECT refId FROM productregister";
+
+            pst = con.prepareStatement(load);
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                refNumText.addItem(rs.getString("refId"));
+
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -48,19 +88,27 @@ if (result == JFileChooser.APPROVE_OPTION) {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        refNumText = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        colorText = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        paperText = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        quantityText = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        rateText = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        totalText = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        pnameText = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        dateText = new org.jdesktop.swingx.JXDatePicker();
+        advanceText = new javax.swing.JTextField();
+        jButton3 = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1200, 900));
@@ -80,12 +128,23 @@ if (result == JFileChooser.APPROVE_OPTION) {
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel5.setText("RATE");
 
+        rateText.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                rateTextKeyReleased(evt);
+            }
+        });
+
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setText("TOTAL");
 
-        jLabel7.setText("RS. XXXXXXXXX");
+        totalText.setText("RS. XXXXXXXXX");
 
         jButton1.setText("PRINT QUOTATION");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("CHOOSE ARTWORK");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -93,6 +152,31 @@ if (result == JFileChooser.APPROVE_OPTION) {
                 jButton2ActionPerformed(evt);
             }
         });
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel8.setText("PERSON NAME");
+
+        pnameText.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                pnameTextMouseReleased(evt);
+            }
+        });
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel9.setText("DUE DATE");
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel10.setText("ADVANCE (OPTIONAL)");
+
+        jButton3.setText("PLACE ORDER");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel11.setText("FIELDS FOR ORDER PLACEMENT");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -106,19 +190,38 @@ if (result == JFileChooser.APPROVE_OPTION) {
                     .addComponent(jLabel3)
                     .addComponent(jLabel4)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel6))
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel8))
                 .addGap(91, 91, 91)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
-                        .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jTextField1)
-                        .addComponent(jTextField2)
-                        .addComponent(jTextField3)
-                        .addComponent(jTextField4)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(588, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(pnameText, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                    .addComponent(refNumText, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(colorText, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(paperText, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(quantityText, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(rateText, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(totalText, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(118, 118, 118)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 104, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel10))
+                        .addGap(85, 85, 85)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(dateText, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
+                            .addComponent(advanceText))
+                        .addGap(105, 105, 105))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel11)
+                        .addGap(195, 195, 195))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -126,32 +229,43 @@ if (result == JFileChooser.APPROVE_OPTION) {
                 .addGap(109, 109, 109)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(52, 52, 52)
+                    .addComponent(refNumText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(53, 53, 53)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(pnameText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(colorText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(52, 52, 52)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(paperText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(60, 60, 60)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(60, 60, 60)
+                    .addComponent(quantityText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11))
+                .addGap(59, 59, 59)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(72, 72, 72)
+                    .addComponent(rateText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9)
+                    .addComponent(dateText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(71, 71, 71)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jLabel7))
-                .addGap(59, 59, 59)
+                    .addComponent(totalText)
+                    .addComponent(jLabel10)
+                    .addComponent(advanceText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(56, 56, 56)
                 .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(127, 127, 127))
+                .addGap(57, 57, 57)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE))
+                .addGap(88, 88, 88))
         );
 
         pack();
@@ -161,6 +275,106 @@ if (result == JFileChooser.APPROVE_OPTION) {
         // TODO add your handling code here:
         x();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        dorm=new deliverOrderMiddle();
+      String refNo = refNumText.getSelectedItem().toString();
+        String pName = pnameText.getSelectedItem().toString();
+        String color = colorText.getText();
+        String paper = paperText.getText();
+        String quantity = quantityText.getText();
+        String rate = rateText.getText();
+        String total = String.valueOf(Double.parseDouble(quantity) * Double.parseDouble(rate));
+        totalText.setText(total);
+        String product=dorm.getProduct(refNo);
+        String cname=getcompany(refNo);
+        pq.setReceipt(cname,quantity,refNo,product,paper,color,rate,selectedFile);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+
+        String refNo = refNumText.getSelectedItem().toString();
+        String pName = pnameText.getSelectedItem().toString();
+        String color = colorText.getText();
+        String paper = paperText.getText();
+        String quantity = quantityText.getText();
+        String rate = rateText.getText();
+
+        Date oDate = dateText.getDate();
+        DateFormat oDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String duedate = oDateFormat.format(oDate);
+
+        String advance = advanceText.getText();
+        String total = String.valueOf(Double.parseDouble(quantity) * Double.parseDouble(rate));
+        totalText.setText(total);
+
+        om.placeOrder(refNo, pName, color, paper, quantity, rate, total, duedate, advance);
+
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void pnameTextMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnameTextMouseReleased
+        // TODO add your handling code here:
+        String refnu = refNumText.getSelectedItem().toString();
+        //  System.out.println(cname);
+        loadPerson(refnu);
+
+
+    }//GEN-LAST:event_pnameTextMouseReleased
+
+    private void rateTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_rateTextKeyReleased
+        // TODO add your handling code here:
+         String quantity = quantityText.getText();
+        String rate = rateText.getText();
+        
+        
+         String total = String.valueOf(Double.parseDouble(quantity) * Double.parseDouble(rate));
+        totalText.setText(total);
+        
+        
+    }//GEN-LAST:event_rateTextKeyReleased
+    private void loadPerson(String refnu) {
+        String cmp = getcompany(refnu);
+        pnameText.removeAllItems();
+        try {
+            String load = "SELECT personname FROM personregister where companyname='" + cmp + "'";
+
+            pst = con.prepareStatement(load);
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                pnameText.addItem(rs.getString("personname"));
+                //   System.out.println(rs.getString("brandname"));
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }
+
+    private String getcompany(String ref) {
+
+        try {
+            String load = "SELECT companyname FROM productregister where refId='" + ref + "'";
+
+            pst = con.prepareStatement(load);
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                String cname = (rs.getString("companyname"));
+                return cname;
+                //   System.out.println(rs.getString("brandname"));
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return null;
+
+    }
 
     /**
      * @param args the command line arguments
@@ -198,19 +412,27 @@ if (result == JFileChooser.APPROVE_OPTION) {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField advanceText;
+    private javax.swing.JTextField colorText;
+    private org.jdesktop.swingx.JXDatePicker dateText;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JTextField paperText;
+    private javax.swing.JComboBox<String> pnameText;
+    private javax.swing.JTextField quantityText;
+    private javax.swing.JTextField rateText;
+    private javax.swing.JComboBox<String> refNumText;
+    private javax.swing.JLabel totalText;
     // End of variables declaration//GEN-END:variables
 }
