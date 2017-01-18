@@ -17,7 +17,8 @@ import java.sql.Statement;
  * @author U Computers
  */
 public class brandMiddle {
-     Connection con = null;
+
+    Connection con = null;
     PreparedStatement pst = null;
     Statement stmt = null;
     ResultSet rs = null;
@@ -28,21 +29,54 @@ public class brandMiddle {
 
     }
 
-    public void registerBrand(String cname,String bname , String acNum, String contactNum, String Email) {
-              try {
-                String q = "INSERT INTO brandregister(companyname,brandname,accountNo,telephone,email) VALUES ('" + cname + "','" + bname + "','" + acNum + "','" + contactNum + "','" + Email + "')";
+    public void registerBrand(String cname, String bname, String acNum, String contactNum, String Email) {
+         mess = new message();
+        boolean bool=getCompany(cname, bname);
+        if(bool==true){
+        try {
+            String q = "INSERT INTO brandregister(companyname,brandname,accountNo,telephone,email) VALUES ('" + cname + "','" + bname + "','" + acNum + "','" + contactNum + "','" + Email + "')";
 
-                pst = con.prepareStatement(q);
-                pst.execute();
+            pst = con.prepareStatement(q);
+            pst.execute();
 
-            } catch (Exception e) {
-                System.out.println(e);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+       
+        mess.messageBox("REGISTRATION SUCCESSFUL");
+        }else{
+        
+                mess.messageBox("THIS BRAND IS ALREADY REGISTERED");
+
+        
+        }
+    }
+
+    public boolean getCompany(String cname, String bname) {
+
+        try {
+            String load = "SELECT companyname,brandname FROM brandregister ";
+
+            pst = con.prepareStatement(load);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+
+                String comname = rs.getString("companyname");
+                String branname = rs.getString("brandname");
+
+                if ((cname.equalsIgnoreCase(comname))&&(bname.equalsIgnoreCase(branname))) {
+
+                    return false;
+                }
+
             }
 
-            mess = new message();
-            mess.messageBox("REGISTRATION SUCCESSFUL");
-        
-        
-        
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return true;
+
     }
 }

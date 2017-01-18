@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import static java.awt.print.Printable.NO_SUCH_PAGE;
@@ -35,7 +34,7 @@ import static middle.docs.printDeliveryNote.dateee;
  *
  * @author U Computers
  */
-public class printQuotation implements Printable, ActionListener {
+public class printQuotationNc implements Printable, ActionListener {
 
     static String cname = null;
     static String bname = null;
@@ -46,7 +45,7 @@ public class printQuotation implements Printable, ActionListener {
     static String Quantity = null;
     static String Rate = null;
     static String Total = null;
-    static  BufferedImage originim=null;
+
     static String dateee = null;
     static String PoNum = null;
     static File selectedfile = null;
@@ -78,7 +77,7 @@ public class printQuotation implements Printable, ActionListener {
         g.drawString(product, 60, 320);
         g.drawString(Paper, 60, 340);
         g.drawString(Color, 60, 360);
-        g.drawString(refId, 60, 380);
+       
         g.drawString(Quantity, 370, 320);
         g.drawString(Rate, 470, 320);
         g.drawString(Total, 470, 620);
@@ -96,7 +95,7 @@ public class printQuotation implements Printable, ActionListener {
          g.drawString("................................", 55, 700);
           g.drawString("Authorized Officer", 55, 720);
         //   String str = FileUtils.readFileToString(selectedfile);
-         g.drawImage(originim, 120, 500, 100, 100, null);
+        //    g.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), null);
         /* tell the caller that this page is part of the printed document */
         return PAGE_EXISTS;
     }
@@ -115,11 +114,11 @@ public class printQuotation implements Printable, ActionListener {
 
     }
 
-    public static void setReceipt(String comname, String quantity, String refid, String pname, String paper, String color, String rate, BufferedImage originalImage) {
+    public static void setReceipt(String comname, String quantity,  String pname, String paper, String color, String rate) {
         Date date = new Date();
         LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         String datex = String.valueOf(localDate);
-        refId = refid;
+       
         product = pname;
         dateee = datex;
         Color = color;
@@ -127,7 +126,7 @@ public class printQuotation implements Printable, ActionListener {
         Quantity = quantity;
         Rate = rate;
         cname = comname;
-        originim=originalImage;
+
         Total = String.valueOf(Double.parseDouble(Rate) * Double.parseDouble(Quantity));
 
         UIManager.put("swing.boldMetal", Boolean.FALSE);
@@ -137,7 +136,7 @@ public class printQuotation implements Printable, ActionListener {
             }
         });
         JButton printButton = new JButton("PRINT RECEIPT ");
-        printButton.addActionListener(new printQuotation());
+        printButton.addActionListener(new printQuotationNc());
         f.add("Center", printButton);
         f.pack();
         f.setVisible(true);

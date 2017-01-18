@@ -17,7 +17,8 @@ import java.sql.Statement;
  * @author U Computers
  */
 public class personMiddle {
-     Connection con = null;
+
+    Connection con = null;
     PreparedStatement pst = null;
     Statement stmt = null;
     ResultSet rs = null;
@@ -29,21 +30,55 @@ public class personMiddle {
     }
 
     public void registerPerson(String cname, String bname, String pname, String contactNum, String Email) {
-              try {
-                String q = "INSERT INTO personregister(companyname,brandname,personname,telephone,email) VALUES ('" + cname + "','" + bname + "','" + pname + "','" + contactNum + "','" + Email + "')";
+          mess = new message();
+          boolean bool=getCompany(cname, bname, pname);
+          if(bool==true){
+        try {
+            String q = "INSERT INTO personregister(companyname,brandname,personname,telephone,email) VALUES ('" + cname + "','" + bname + "','" + pname + "','" + contactNum + "','" + Email + "')";
 
-                pst = con.prepareStatement(q);
-                pst.execute();
+            pst = con.prepareStatement(q);
+            pst.execute();
 
-            } catch (Exception e) {
-                System.out.println(e);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+      
+        mess.messageBox("REGISTRATION SUCCESSFUL");
+          }else{
+          
+                  mess.messageBox("THIS PERSON IS ALREADY REGISTERED");
+
+          
+          }
+    }
+
+    public boolean getCompany(String cname, String bname,String pname) {
+
+        try {
+            String load = "SELECT companyname,brandname,personname FROM personregister ";
+
+            pst = con.prepareStatement(load);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+
+                String comname = rs.getString("companyname");
+                String branname = rs.getString("brandname");
+                String pername = rs.getString("personname");
+
+                if ((cname.equalsIgnoreCase(comname)) && (bname.equalsIgnoreCase(branname))&& (pname.equalsIgnoreCase(pername))) {
+
+                    return false;
+                }
+
             }
 
-            mess = new message();
-            mess.messageBox("REGISTRATION SUCCESSFUL");
-        
-        
-        
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return true;
+
     }
-    
+
 }

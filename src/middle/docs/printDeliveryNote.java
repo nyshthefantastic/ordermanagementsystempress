@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package middle.docs;
 
 import java.awt.Graphics;
@@ -20,6 +15,7 @@ import java.awt.print.PrinterJob;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+import static middle.docs.printInvoice.Id;
 
 /**
  *
@@ -56,11 +52,14 @@ public class printDeliveryNote implements Printable, ActionListener {
 
         /* Now we perform our rendering */
         String newline = System.getProperty("line.separator");
-        g.drawString(dateee, 120, 100);
-        g.drawString(PoNum, 120, 100);
-        g.drawString(Quantity, 120, 100);
-        g.drawString(product + " ( " + refId + " )", 120, 100);
+        g.drawString(Id, 122, 65);
+        g.drawString(dateee, 118, 95);
+       g.drawString(PoNum, 193, 118);
+        g.drawString(cname, 170, 137);
+        g.drawString(Quantity, 85, 208);
+        g.drawString(product + " ( " + refId + " )", 160, 208);
 
+     
         //   g.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), null);
         /* tell the caller that this page is part of the printed document */
         return PAGE_EXISTS;
@@ -80,25 +79,27 @@ public class printDeliveryNote implements Printable, ActionListener {
 
     }
 
-    public static void setReceipt(String ponum, String comname, String quantity, String refid, String date, String pname) {
+    public static void setReceipt(String ponum, String comname, String quantity, String refid, String date, String pname,String idxx) {
         refId = refid;
         product = pname;
         dateee = date;
         PoNum = ponum;
         Quantity = quantity;
-
+        Id=idxx;
         cname = comname;
 
         UIManager.put("swing.boldMetal", Boolean.FALSE);
-        JFrame f = new JFrame("RECEIPT PRINTER");
+        JFrame f = new JFrame("DELIVERY NOTE PRINTER");
         f.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
             }
         });
-        JButton printButton = new JButton("PRINT RECEIPT ");
-        printButton.addActionListener(new printQuotation());
+        JButton printButton = new JButton("PRINT DELIVERY NOTE ");
+        printButton.addActionListener(new printDeliveryNote());
         f.add("Center", printButton);
         f.pack();
+        f.setLocation(100, 100);
         f.setVisible(true);
+      
     }
 }

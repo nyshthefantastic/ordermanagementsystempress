@@ -33,7 +33,7 @@ public class loginMiddle {
 
             pst = con.prepareStatement(load);
             rs = pst.executeQuery();
-            while (rs.next()) {
+            if (rs.next()) {
               return true;
             }
 

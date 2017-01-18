@@ -5,6 +5,16 @@
  */
 package client.docs;
 
+import client.nc.paymentncClient;
+import client.nc.quotationncClient;
+import client.nc.registerncClient;
+import client.registration.addProduct;
+import client.registration.brandClient;
+import client.registration.companyClient;
+import client.registration.personClient;
+import client.reports.defaultedPaymentClient;
+import client.reports.*;
+import client.general.dashboardClient;
 import common.message;
 import common.populateTable;
 import middle.docs.purchaseOrderMiddle;
@@ -23,6 +33,7 @@ public class purchaseOrder extends javax.swing.JFrame {
 
     public purchaseOrder() {
         initComponents();
+        initab();
     }
     message mess = new message();
 
@@ -39,10 +50,33 @@ public class purchaseOrder extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         searchText = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
+        jMenuItem9 = new javax.swing.JMenuItem();
+        jMenuItem14 = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItem10 = new javax.swing.JMenuItem();
+        jMenuItem11 = new javax.swing.JMenuItem();
+        jMenuItem12 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1200, 900));
+        setMinimumSize(new java.awt.Dimension(1200, 700));
+        setPreferredSize(new java.awt.Dimension(1200, 700));
+        getContentPane().setLayout(null);
 
+        jTable1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -61,6 +95,10 @@ public class purchaseOrder extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(113, 276, 695, 402);
+
+        searchText.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         searchText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchTextActionPerformed(evt);
@@ -71,38 +109,199 @@ public class purchaseOrder extends javax.swing.JFrame {
                 searchTextKeyReleased(evt);
             }
         });
+        getContentPane().add(searchText);
+        searchText.setBounds(320, 180, 270, 40);
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("QUICK SEARCH");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(113, 190, 185, 29);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(113, 113, 113)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 695, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(144, 144, 144)
-                        .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(392, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(240, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(searchText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGap(56, 56, 56)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(157, 157, 157))
-        );
+        jButton5.setText("HOME");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton5);
+        jButton5.setBounds(731, 10, 80, 60);
+
+        jMenuBar1.setPreferredSize(new java.awt.Dimension(286, 40));
+
+        jMenu1.setText("REGISTRATION");
+        jMenu1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+
+        jMenuItem1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem1.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem1.setText("COMPANY REGISTRATION");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuItem2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem2.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem2.setText("BRAND REGISTRATION");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
+        jMenuItem3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem3.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem3.setText("PERSON REGISTRATION");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem3);
+
+        jMenuItem4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem4.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem4.setText("ADD ITEM");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem4);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("DOCS");
+        jMenu2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+
+        jMenuItem5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem5.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem5.setText("GENERATE QUOTATION ");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem5);
+
+        jMenuItem6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem6.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem6.setText("ADD PURCHASING ORDER");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem6);
+
+        jMenuItem7.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem7.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem7.setText("DELIVER");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem7);
+
+        jMenuItem8.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem8.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem8.setText("MARK PAYMENT");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem8);
+
+        jMenuBar1.add(jMenu2);
+
+        jMenu3.setText("REPORTS");
+        jMenu3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+
+        jCheckBoxMenuItem1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jCheckBoxMenuItem1.setForeground(new java.awt.Color(51, 51, 51));
+        jCheckBoxMenuItem1.setSelected(true);
+        jCheckBoxMenuItem1.setText("DEFAULTED PAYMENTS");
+        jCheckBoxMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jCheckBoxMenuItem1);
+
+        jMenuItem9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem9.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem9.setText("DEFAULTED PURCHASE");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem9);
+
+        jMenuItem14.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem14.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem14.setText("ALL REPORTS");
+        jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem14ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem14);
+
+        jMenuBar1.add(jMenu3);
+
+        jMenu4.setText("NORMAL CLIENT");
+        jMenu4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+
+        jMenuItem10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem10.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem10.setText("NORMAL CLIENT REGISTER");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem10);
+
+        jMenuItem11.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem11.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem11.setText("PRINT QUOTATION");
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem11ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem11);
+
+        jMenuItem12.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem12.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem12.setText("MAKE PAYMENT");
+        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem12ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem12);
+
+        jMenuBar1.add(jMenu4);
+
+        setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    private void initab() {
 
+        pt = new populateTable();
+
+        pt.searchData(jTable1, "SELECT id,companyName,refId,personName,total,orderDate FROM companyorders WHERE  purchaseOrderDate='" + "null" + "'");
+
+        pt = null;
+
+    }
     private void searchTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchTextActionPerformed
         // TODO add your handling code here:
 
@@ -115,7 +314,7 @@ public class purchaseOrder extends javax.swing.JFrame {
         pt = new populateTable();
 
         pt.searchData(jTable1, "SELECT id,companyName,refId,personName,total,orderDate FROM companyorders WHERE (refId like'" + search + "%'  or total like '" + search + "%' or companyName like '" + search + "%' or brandName like '" + search + "%' or personName like '" + search + "%')AND purchaseOrderDate='" + "null" + "'");
-       
+
         search = "";
         pt = null;
 
@@ -138,6 +337,112 @@ public class purchaseOrder extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        companyClient cc = new companyClient();
+        cc.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        brandClient bc = new brandClient();
+        bc.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        personClient pc = new personClient();
+        pc.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        addProduct ap = new addProduct();
+        ap.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        quotationClient qc = new quotationClient();
+        qc.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        // TODO add your handling code here:
+        purchaseOrder po = new purchaseOrder();
+        po.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        // TODO add your handling code here:
+        deliverOrderClient doc = new deliverOrderClient();
+        doc.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        // TODO add your handling code here:
+        paymentAddition pa = new paymentAddition();
+        pa.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        defaultedPaymentClient dpc = new defaultedPaymentClient();
+        dpc.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
+
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+        // TODO add your handling code here:
+        defaultedPurchase dp = new defaultedPurchase();
+        dp.setVisible(true);
+        this.setVisible(false);
+
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
+
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        // TODO add your handling code here:
+        registerncClient rnc = new registerncClient();
+        rnc.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
+
+    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+        // TODO add your handling code here:
+        quotationncClient qnc = new quotationncClient();
+        qnc.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem11ActionPerformed
+
+    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+        // TODO add your handling code here:
+        paymentncClient pnc = new paymentncClient();
+        pnc.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem12ActionPerformed
+
+    private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
+        // TODO add your handling code here:
+        allReport ar=new allReport();
+        ar.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem14ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        dashboardClient dc=new dashboardClient();
+        dc.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -175,7 +480,31 @@ public class purchaseOrder extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem10;
+    private javax.swing.JMenuItem jMenuItem11;
+    private javax.swing.JMenuItem jMenuItem12;
+    private javax.swing.JMenuItem jMenuItem14;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField searchText;

@@ -28,7 +28,7 @@ import javax.swing.UIManager;
 public class printInvoice implements Printable, ActionListener {
 
     static String cname = null;
-    static String bname = null;
+    static String Id = null;
     static String refId = null;
     static String product = null;
     static String Color = null;
@@ -57,18 +57,21 @@ public class printInvoice implements Printable, ActionListener {
         /* Now we perform our rendering */
         Total = String.valueOf(Double.parseDouble(Rate) * Double.parseDouble(Quantity));
         String newline = System.getProperty("line.separator");
-        g.drawString(dateee, 120, 100);
-        g.drawString(PoNum, 120, 100);
-        g.drawString(Quantity, 120, 100);
-        g.drawString(product + " ( " + refId + " )", 120, 100);
-        g.drawString(Total, 120, 100);
+          g.drawString(Id, 117, 83);
+        g.drawString(dateee, 92, 111);
+        g.drawString(PoNum, 172, 130);
+         g.drawString(cname, 140, 171);
+        g.drawString(Quantity, 90, 239);
+        g.drawString(product + " ( " + refId + " )", 140, 240);
+        g.drawString(Rate, 400, 239);
+        g.drawString(Total, 430, 540);
 
         //   g.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), null);
         /* tell the caller that this page is part of the printed document */
         return PAGE_EXISTS;
     }
-
-    public void actionPerformed(ActionEvent e) {
+ 
+   public void actionPerformed(ActionEvent e) {
         PrinterJob job = PrinterJob.getPrinterJob();
         job.setPrintable(this);
         boolean ok = job.printDialog();
@@ -82,7 +85,7 @@ public class printInvoice implements Printable, ActionListener {
 
     }
 
-    public static void setReceipt(String ponum, String comname, String quantity, String refid, String date, String pname, String rate) {
+    public static void setReceipt(String oid,String ponum, String comname, String quantity, String refid, String date, String pname, String rate) {
         refId = refid;
         product = pname;
         dateee = date;
@@ -90,17 +93,21 @@ public class printInvoice implements Printable, ActionListener {
         Quantity = quantity;
         Rate = rate;
         cname = comname;
-
+       Id=oid;
+      
+   
         UIManager.put("swing.boldMetal", Boolean.FALSE);
-        JFrame f = new JFrame("RECEIPT PRINTER");
+        JFrame f = new JFrame("INVOICE PRINTER");
         f.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
             }
         });
-        JButton printButton = new JButton("PRINT RECEIPT ");
-        printButton.addActionListener(new printQuotation());
+        JButton printButton = new JButton("INVOICE PRINTER");
+        printButton.addActionListener(new printInvoice());
         f.add("Center", printButton);
         f.pack();
+         f.setLocation(100, 200);
         f.setVisible(true);
+
     }
 }

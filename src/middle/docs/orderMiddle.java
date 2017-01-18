@@ -34,17 +34,17 @@ public class orderMiddle {
 
     }
 
-    public void placeOrder(String refid, String pname, String Color, String Paper, String Quantity, String Rate, String Total, String duedate, String Advance) {
+    public void placeOrder(String refid, String pname, String Color, String Paper, String Quantity, String Rate, String Total, String duedate, String Advance,String payback) {
         date = new Date();
         String cname = getCompanyName(pname);
         String bname = getBrandName(pname);
         LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         int monthh = localDate.getMonthValue();
-
+       
         int yearr = Calendar.getInstance().get(Calendar.YEAR);
         String datee = String.valueOf(localDate);
         try {
-            String q = "INSERT INTO companyorders(companyName,brandName,refId,personName,color,paper,quantity,rate,total,dueDate,advance,orderDate,orderMonth,orderYear,purchaseOrderDate,purchaseOrderNo,deliveredDate,paymentStatus,paidAmt) VALUES ('" + cname + "','" + bname + "','" + refid + "','" + pname + "','" + Color + "','" + Paper + "','" + Quantity + "','" + Rate + "','" + Total + "','" + duedate + "','" + Advance + "','" + datee + "','" + monthh + "','" + yearr + "','" + "null" + "','" + "null" + "','" + "null" + "','" + "null" + "','" + "0" + "')";
+            String q = "INSERT INTO companyorders(companyName,brandName,refId,personName,color,paper,quantity,rate,total,dueDate,advance,orderDate,orderMonth,orderYear,purchaseOrderDate,purchaseOrderNo,deliveredDate,paymentStatus,paidAmt,allowedMonths) VALUES ('" + cname + "','" + bname + "','" + refid + "','" + pname + "','" + Color + "','" + Paper + "','" + Quantity + "','" + Rate + "','" + Total + "','" + duedate + "','" + Advance + "','" + datee + "','" + monthh + "','" + yearr + "','" + "null" + "','" + "null" + "','" + "null" + "','" + "null" + "','" + "0" + "','" + payback + "')";
 
             pst = con.prepareStatement(q);
             pst.execute();

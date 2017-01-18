@@ -27,13 +27,13 @@ public class orderncMiddle {
     ResultSet rs = null;
     message mess = new message();
     Date date = null;
-
+    double adv;
     public orderncMiddle() {
         con = dbconnct.connect();
 
     }
     
-    public void placeOrder(String item, String pname, String Color, String Paper, String Quantity, String Rate, String Total, String duedate, String Advance) {
+    public void placeOrder(String item, String pname, String Color, String Paper, String Quantity, String Rate, String Total, String Advance) {
         date = new Date();
         
         LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -41,8 +41,13 @@ public class orderncMiddle {
 
         int yearr = Calendar.getInstance().get(Calendar.YEAR);
         String datee = String.valueOf(localDate);
+        if((Advance==null) ||(Advance.equals(""))){
+            adv=0.0;
+        }else{
+            adv=Double.parseDouble(Advance);
+        }
         try {
-            String q = "INSERT INTO ncorders(itemName,personName,color,paper,quantity,rate,total,advance,orderDate,orderMonth,orderYear,paymentStatus,paidAmt) VALUES ('" + item + "','" + pname + "','" + Color + "','" + Paper + "','" + Quantity + "','" + Rate + "','" + Total + "','" + Advance + "','" + datee + "','" + monthh + "','" + yearr + "','" + "null" + "','" + "0" + "')";
+            String q = "INSERT INTO ncorders(itemName,personName,color,paper,quantity,rate,total,advance,orderDate,orderMonth,orderYear,paymentStatus,paidAmt) VALUES ('" + item + "','" + pname + "','" + Color + "','" + Paper + "','" + Quantity + "','" + Rate + "','" + Total + "','" + adv + "','" + datee + "','" + monthh + "','" + yearr + "','" + "null" + "','" + "0" + "')";
 
             pst = con.prepareStatement(q);
             pst.execute();

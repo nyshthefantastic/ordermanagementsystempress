@@ -30,7 +30,10 @@ public class companyMiddle {
     }
 
     public void registerCompany(String cname, String address, String acNum, String contactNum, String Email) {
-              try {
+        mess = new message();
+        boolean bool = getCompany(cname);
+        if (bool == true) {
+            try {
                 String q = "INSERT INTO companyregister(name,address,accountNo,telephone,email) VALUES ('" + cname + "','" + address + "','" + acNum + "','" + contactNum + "','" + Email + "')";
 
                 pst = con.prepareStatement(q);
@@ -40,10 +43,37 @@ public class companyMiddle {
                 System.out.println(e);
             }
 
-            mess = new message();
             mess.messageBox("REGISTRATION SUCCESSFUL");
-        
-        
-        
+        } else {
+
+            mess.messageBox("THE COMPANY IS ALREADY REGISTERED");
+
+        }
+
+    }
+
+    public boolean getCompany(String cname) {
+
+        try {
+            String load = "SELECT name FROM companyregister ";
+
+            pst = con.prepareStatement(load);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+
+                String namee = rs.getString("name");
+                if (cname.equalsIgnoreCase(namee)) {
+
+                    return false;
+                }
+
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return true;
+
     }
 }

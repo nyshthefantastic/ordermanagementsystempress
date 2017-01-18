@@ -5,16 +5,32 @@
  */
 package client.docs;
 
+import client.general.dashboardClient;
+import client.nc.paymentncClient;
+import client.nc.quotationncClient;
+import client.nc.registerncClient;
+import client.registration.addProduct;
+import client.registration.brandClient;
+import client.registration.companyClient;
+import client.registration.personClient;
+import client.reports.*;
+import client.reports.defaultedPurchase;
 import common.dbconnct;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import middle.docs.deliverOrderMiddle;
@@ -37,7 +53,13 @@ public class quotationClient extends javax.swing.JFrame {
     orderMiddle om = new orderMiddle();
     printQuotation pq;
     deliverOrderMiddle dorm;
-     File selectedFile ;
+    String color;
+    String paper;
+    String advance;
+    File selectedFile;
+    String duedate;
+    BufferedImage originalImage;
+        ArrayList labb = new ArrayList();
 
     public quotationClient() {
         initComponents();
@@ -53,7 +75,7 @@ public class quotationClient extends javax.swing.JFrame {
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
-             selectedFile = fileChooser.getSelectedFile();
+            selectedFile = fileChooser.getSelectedFile();
 
         }
 
@@ -92,7 +114,6 @@ public class quotationClient extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         colorText = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        paperText = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         quantityText = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -109,164 +130,346 @@ public class quotationClient extends javax.swing.JFrame {
         advanceText = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        paybackText = new javax.swing.JTextField();
+        paperText = new javax.swing.JComboBox<>();
+        jButton5 = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
+        jMenuItem9 = new javax.swing.JMenuItem();
+        jMenuItem16 = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItem10 = new javax.swing.JMenuItem();
+        jMenuItem11 = new javax.swing.JMenuItem();
+        jMenuItem12 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1200, 900));
+        setMinimumSize(new java.awt.Dimension(1200, 700));
+        setPreferredSize(new java.awt.Dimension(1200, 700));
+        getContentPane().setLayout(null);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("REFERENCE NUMBER");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(94, 51, 151, 17);
+
+        refNumText.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        getContentPane().add(refNumText);
+        refNumText.setBounds(420, 50, 267, 21);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setText("COLOR");
+        getContentPane().add(jLabel2);
+        jLabel2.setBounds(90, 200, 50, 17);
+
+        colorText.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        getContentPane().add(colorText);
+        colorText.setBounds(420, 200, 267, 21);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setText("PAPER PROPERTIES (OPTIONAL)");
+        getContentPane().add(jLabel3);
+        jLabel3.setBounds(90, 270, 235, 17);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel4.setText("QUANTITY");
+        getContentPane().add(jLabel4);
+        jLabel4.setBounds(94, 355, 76, 17);
+
+        quantityText.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        getContentPane().add(quantityText);
+        quantityText.setBounds(420, 354, 267, 21);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel5.setText("RATE");
+        getContentPane().add(jLabel5);
+        jLabel5.setBounds(94, 435, 38, 17);
 
+        rateText.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         rateText.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 rateTextKeyReleased(evt);
             }
         });
+        getContentPane().add(rateText);
+        rateText.setBounds(420, 434, 267, 21);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setText("TOTAL");
+        getContentPane().add(jLabel6);
+        jLabel6.setBounds(94, 528, 47, 17);
 
+        totalText.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         totalText.setText("RS. XXXXXXXXX");
+        getContentPane().add(totalText);
+        totalText.setBounds(420, 528, 267, 17);
 
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jButton1.setText("PRINT QUOTATION");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton1);
+        jButton1.setBounds(900, 380, 267, 69);
 
+        jButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton2.setText("CHOOSE ARTWORK");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton2);
+        jButton2.setBounds(950, 250, 217, 31);
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel8.setText("PERSON NAME");
+        getContentPane().add(jLabel8);
+        jLabel8.setBounds(94, 125, 105, 17);
 
+        pnameText.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         pnameText.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 pnameTextMouseReleased(evt);
             }
         });
+        getContentPane().add(pnameText);
+        pnameText.setBounds(420, 124, 267, 21);
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setText("DUE DATE");
+        getContentPane().add(jLabel9);
+        jLabel9.setBounds(750, 120, 71, 17);
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel10.setText("ADVANCE (OPTIONAL)");
+        getContentPane().add(jLabel10);
+        jLabel10.setBounds(750, 200, 162, 20);
 
+        dateText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dateTextActionPerformed(evt);
+            }
+        });
+        getContentPane().add(dateText);
+        dateText.setBounds(950, 120, 217, 22);
+
+        advanceText.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        getContentPane().add(advanceText);
+        advanceText.setBounds(950, 190, 220, 21);
+
+        jButton3.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jButton3.setText("PLACE ORDER");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton3);
+        jButton3.setBounds(900, 529, 267, 69);
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel11.setText("FIELDS FOR ORDER PLACEMENT");
+        getContentPane().add(jLabel11);
+        jLabel11.setBounds(850, 20, 229, 26);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(94, 94, 94)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel8))
-                .addGap(91, 91, 91)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(pnameText, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
-                    .addComponent(refNumText, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(colorText, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(paperText, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(quantityText, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(rateText, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(totalText, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(118, 118, 118)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 104, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel10))
-                        .addGap(85, 85, 85)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(dateText, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
-                            .addComponent(advanceText))
-                        .addGap(105, 105, 105))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel11)
-                        .addGap(195, 195, 195))))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(109, 109, 109)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(refNumText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(53, 53, 53)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(pnameText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(colorText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(52, 52, 52)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(paperText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(60, 60, 60)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(quantityText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11))
-                .addGap(59, 59, 59)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(rateText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9)
-                    .addComponent(dateText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(71, 71, 71)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(totalText)
-                    .addComponent(jLabel10)
-                    .addComponent(advanceText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(56, 56, 56)
-                .addComponent(jButton2)
-                .addGap(57, 57, 57)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE))
-                .addGap(88, 88, 88))
-        );
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel7.setText("MONTHS TO PAYBACK");
+        getContentPane().add(jLabel7);
+        jLabel7.setBounds(750, 60, 170, 17);
+        getContentPane().add(paybackText);
+        paybackText.setBounds(950, 60, 210, 20);
+
+        paperText.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        getContentPane().add(paperText);
+        paperText.setBounds(420, 270, 270, 20);
+
+        jButton5.setText("HOME");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton5);
+        jButton5.setBounds(1110, 0, 61, 40);
+
+        jMenuBar1.setPreferredSize(new java.awt.Dimension(286, 40));
+
+        jMenu1.setText("REGISTRATION");
+        jMenu1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+
+        jMenuItem1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem1.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem1.setText("COMPANY REGISTRATION");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuItem2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem2.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem2.setText("BRAND REGISTRATION");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
+        jMenuItem3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem3.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem3.setText("PERSON REGISTRATION");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem3);
+
+        jMenuItem4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem4.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem4.setText("ADD ITEM");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem4);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("DOCS");
+        jMenu2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+
+        jMenuItem5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem5.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem5.setText("GENERATE QUOTATION ");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem5);
+
+        jMenuItem6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem6.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem6.setText("ADD PURCHASING ORDER");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem6);
+
+        jMenuItem7.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem7.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem7.setText("DELIVER");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem7);
+
+        jMenuItem8.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem8.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem8.setText("MARK PAYMENT");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem8);
+
+        jMenuBar1.add(jMenu2);
+
+        jMenu3.setText("REPORTS");
+        jMenu3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+
+        jCheckBoxMenuItem1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jCheckBoxMenuItem1.setForeground(new java.awt.Color(51, 51, 51));
+        jCheckBoxMenuItem1.setSelected(true);
+        jCheckBoxMenuItem1.setText("DEFAULTED PAYMENTS");
+        jCheckBoxMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jCheckBoxMenuItem1);
+
+        jMenuItem9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem9.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem9.setText("DEFAULTED PURCHASE");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem9);
+
+        jMenuItem16.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem16.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem16.setText("ALL REPORTS");
+        jMenuItem16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem16ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem16);
+
+        jMenuBar1.add(jMenu3);
+
+        jMenu4.setText("NORMAL CLIENT");
+        jMenu4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+
+        jMenuItem10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem10.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem10.setText("NORMAL CLIENT REGISTER");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem10);
+
+        jMenuItem11.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem11.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem11.setText("PRINT QUOTATION");
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem11ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem11);
+
+        jMenuItem12.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuItem12.setForeground(new java.awt.Color(51, 51, 51));
+        jMenuItem12.setText("MAKE PAYMENT");
+        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem12ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem12);
+
+        jMenuBar1.add(jMenu4);
+
+        setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -278,39 +481,85 @@ public class quotationClient extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        dorm=new deliverOrderMiddle();
-      String refNo = refNumText.getSelectedItem().toString();
+      dorm = new deliverOrderMiddle();
+        String refNo = refNumText.getSelectedItem().toString();
         String pName = pnameText.getSelectedItem().toString();
         String color = colorText.getText();
-        String paper = paperText.getText();
+        String paper = paperText.getSelectedItem().toString();
         String quantity = quantityText.getText();
         String rate = rateText.getText();
         String total = String.valueOf(Double.parseDouble(quantity) * Double.parseDouble(rate));
         totalText.setText(total);
-        String product=dorm.getProduct(refNo);
-        String cname=getcompany(refNo);
-        pq.setReceipt(cname,quantity,refNo,product,paper,color,rate,selectedFile);
-    }//GEN-LAST:event_jButton1ActionPerformed
+        String product = dorm.getProduct(refNo);
+        String cname = getcompany(refNo);
 
+        try {
+             originalImage = ImageIO.read(selectedFile);
+        } catch (IOException ex) {
+          
+        }
+       
+      
+        pq.setReceipt(cname, quantity, refNo, product, paper, color, rate,originalImage);
+    }//GEN-LAST:event_jButton1ActionPerformed
+   private String getcompany(String ref) {
+
+        try {
+            String load = "SELECT companyname FROM productregister where refId='" + ref + "'";
+
+            pst = con.prepareStatement(load);
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                String cname=rs.getString("companyname");
+               return cname;
+              
+                //   System.out.println(rs.getString("brandname"));
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+       
+
+    }
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
 
         String refNo = refNumText.getSelectedItem().toString();
         String pName = pnameText.getSelectedItem().toString();
-        String color = colorText.getText();
-        String paper = paperText.getText();
+        color = colorText.getText();
+        paper = paperText.getSelectedItem().toString();
         String quantity = quantityText.getText();
         String rate = rateText.getText();
-
+        String payback=paybackText.getText();
         Date oDate = dateText.getDate();
-        DateFormat oDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String duedate = oDateFormat.format(oDate);
+        if (oDate == null) {
+            duedate = "";
 
-        String advance = advanceText.getText();
+        } else {
+
+            DateFormat oDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            duedate = oDateFormat.format(oDate);
+        }
+        advance = advanceText.getText();
         String total = String.valueOf(Double.parseDouble(quantity) * Double.parseDouble(rate));
         totalText.setText(total);
+        if (advance == null) {
+            advance = "0";
 
-        om.placeOrder(refNo, pName, color, paper, quantity, rate, total, duedate, advance);
+        }
+
+        if (color == null) {
+            color = "";
+
+        }
+        if (paper == null) {
+            paper = "";
+
+        }
+        om.placeOrder(refNo, pName, color, paper, quantity, rate, total, duedate, advance,payback);
 
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -325,20 +574,137 @@ public class quotationClient extends javax.swing.JFrame {
 
     private void rateTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_rateTextKeyReleased
         // TODO add your handling code here:
-         String quantity = quantityText.getText();
+        String quantity = quantityText.getText();
         String rate = rateText.getText();
-        
-        
-         String total = String.valueOf(Double.parseDouble(quantity) * Double.parseDouble(rate));
+
+        String total = String.valueOf(Double.parseDouble(quantity) * Double.parseDouble(rate));
         totalText.setText(total);
-        
-        
+
+
     }//GEN-LAST:event_rateTextKeyReleased
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        companyClient cc=new companyClient();
+        cc.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        brandClient bc=new brandClient();
+        bc.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        personClient pc=new personClient();
+        pc.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        addProduct ap=new addProduct();
+        ap.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        quotationClient qc=new quotationClient();
+        qc.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        // TODO add your handling code here:
+        purchaseOrder po=new purchaseOrder();
+        po.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        // TODO add your handling code here:
+        deliverOrderClient doc=new deliverOrderClient();
+        doc.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        // TODO add your handling code here:
+        paymentAddition pa=new paymentAddition();
+        pa.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        defaultedPaymentClient dpc=new defaultedPaymentClient();
+        dpc.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
+
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+        // TODO add your handling code here:
+        defaultedPurchase dp=new defaultedPurchase();
+        dp.setVisible(true);
+        this.setVisible(false);
+
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
+
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        // TODO add your handling code here:
+        registerncClient rnc=new registerncClient();
+        rnc.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
+
+    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+        // TODO add your handling code here:
+        quotationncClient qnc=new quotationncClient();
+        qnc.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem11ActionPerformed
+
+    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+        // TODO add your handling code here:
+        paymentncClient pnc=new paymentncClient();
+        pnc.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem12ActionPerformed
+
+    private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
+        // TODO add your handling code here:
+        allReport ar=new allReport();
+        ar.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItem16ActionPerformed
+
+    private void dateTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dateTextActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        dashboardClient dc=new dashboardClient();
+        dc.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton5ActionPerformed
     private void loadPerson(String refnu) {
-        String cmp = getcompany(refnu);
+        getcompanyy(refnu);
         pnameText.removeAllItems();
-        try {
-            String load = "SELECT personname FROM personregister where companyname='" + cmp + "'";
+        for(int a=0;a<labb.size();a++){
+            String x=String.valueOf(labb.get(a));
+            setPName(x);
+        }
+    
+
+    }
+private void setPName(String x) {
+    try {
+            String load = "SELECT personname FROM personregister where companyname='" + x + "'";
 
             pst = con.prepareStatement(load);
             rs = pst.executeQuery();
@@ -352,9 +718,11 @@ public class quotationClient extends javax.swing.JFrame {
             System.out.println(e);
         }
 
-    }
 
-    private String getcompany(String ref) {
+
+
+}
+    private void getcompanyy(String ref) {
 
         try {
             String load = "SELECT companyname FROM productregister where refId='" + ref + "'";
@@ -363,8 +731,9 @@ public class quotationClient extends javax.swing.JFrame {
             rs = pst.executeQuery();
 
             while (rs.next()) {
-                String cname = (rs.getString("companyname"));
-                return cname;
+                String cname=rs.getString("companyname");
+                labb.add(cname);
+              
                 //   System.out.println(rs.getString("brandname"));
             }
 
@@ -372,7 +741,7 @@ public class quotationClient extends javax.swing.JFrame {
             System.out.println(e);
         }
 
-        return null;
+       
 
     }
 
@@ -418,6 +787,8 @@ public class quotationClient extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -426,9 +797,29 @@ public class quotationClient extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JTextField paperText;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem10;
+    private javax.swing.JMenuItem jMenuItem11;
+    private javax.swing.JMenuItem jMenuItem12;
+    private javax.swing.JMenuItem jMenuItem16;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JMenuItem jMenuItem9;
+    private javax.swing.JComboBox<String> paperText;
+    private javax.swing.JTextField paybackText;
     private javax.swing.JComboBox<String> pnameText;
     private javax.swing.JTextField quantityText;
     private javax.swing.JTextField rateText;
